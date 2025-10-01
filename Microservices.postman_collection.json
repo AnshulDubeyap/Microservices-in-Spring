@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "d5d12d8b-4b8c-4deb-81f6-d507b912d540",
+		"name": "Microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39044769",
+		"_collection_link": "https://www.postman.com/adfad3/workspace/springrest/collection/39044769-d5d12d8b-4b8c-4deb-81f6-d507b912d540?action=share&source=collection_link&creator=39044769"
+	},
+	"item": [
+		{
+			"name": "Get All Questions - question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/question/allQuestions",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"allQuestions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get By Category - question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/question/category/Geography",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"category",
+						"Geography"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a Question - question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"questionTitle\": \"Which is the highest waterfall in the world?\",\r\n    \"option1\": \"Niagara Falls\",\r\n    \"option2\": \"Victoria Falls\",\r\n    \"option3\": \"Angel Falls\",\r\n    \"option4\": \"Iguazu Falls\",\r\n    \"rightAnswer\": \"Angel Falls\",\r\n    \"difficultyLevel\": \"Medium\",\r\n    \"category\": \"Geography\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/question/add",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Questions- question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/question/Geography/2",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"Geography",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get By IDs - question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[1, 4, 5, 7]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/question/getQuestions",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"getQuestions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Quiz-quiz service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryName\":\"Geography\",\r\n    \"numQuestions\":4,\r\n    \"title\":\"First Quiz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/quiz/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"quiz",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Quiz Questions-quiz service",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryName\":\"Geography\",\r\n    \"numQuestions\":1,\r\n    \"title\":\"First Quiz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/quiz/get/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"quiz",
+						"get",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Score- question service",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"1\",\r\n    \"response\":\"Shakespeare\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/question/getScore",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"question",
+						"getScore"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

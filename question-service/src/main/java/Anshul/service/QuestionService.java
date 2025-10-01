@@ -26,9 +26,8 @@ public class QuestionService {
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
 	}
-
 
 	// add a question
 	public ResponseEntity<String> addQuestion(Question question) {
@@ -41,66 +40,61 @@ public class QuestionService {
 	}
 
 	// get questions by category
-	public ResponseEntity<List<Question>> getQuestionsByCategory(String category) {
+	public ResponseEntity<List<Question>> getQuestionsByCategory( String category) {
 		try{
 			return new ResponseEntity<>(questionDao.findByCategory(category), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
 	}
 
-	public ResponseEntity<List<Integer>> getQuestionsForQuiz(String categoryName, int numQuestions) {
+	public ResponseEntity<List<Integer>> getQuestionsForQuiz(String category, int numQuestions) {
 
-		List<Integer> questions = questionDao.findQuestionsByCategory(categoryName, numQuestions);
-
+		List<Integer> questions = questionDao.findQuestionsByCategory(category, numQuestions);
 		return new ResponseEntity<>(questions, HttpStatus.OK);
 
 	}
 
-
 	public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(List<Integer> questionIds) {
-
-		List<QuestionWrapper> wrappers = new ArrayList<>();
-
+		List<QuestionWrapper> questionWrappers = new ArrayList<>();
 		List<Question> questions = new ArrayList<>();
 
-		// fetch the questions
-		for(Integer id : questionIds) {
-			questions.add(questionDao.findById(id).get());
+		for(Integer Id : questionIds) {
+			if (questionDao.findById(Id).isPresent()) {
+				questions.add(questionDao.findById(Id).get());
+			}
 		}
 
-		// remove the answers from the questions
 		for(Question question : questions) {
-			QuestionWrapper wrapper = new QuestionWrapper();
-			wrapper.setId(question.getId());
-			wrapper.setOption1(question.getOption1());
-			wrapper.setOption2(question.getOption2());
-			wrapper.setOption3(question.getOption3());
-			wrapper.setOption4(question.getOption4());
-			wrappers.add(wrapper);
+			QuestionWrapper questionWrapper = new QuestionWrapper();
+			questionWrapper.setId(question.getId());
+			questionWrapper.setQuestionTitle(question.getQuestionTitle());
+			questionWrapper.setOption1(question.getOption1());
+			questionWrapper.setOption2(question.getOption2());
+			questionWrapper.setOption3(question.getOption3());
+			questionWrapper.setOption4(question.getOption4());
+			questionWrappers.add(questionWrapper);
 		}
-
-		return new ResponseEntity<>(wrappers, HttpStatus.OK);
-
+		return new ResponseEntity<>(questionWrappers, HttpStatus.OK);
 	}
 
 	public ResponseEntity<Integer> getScore(List<Response> responses) {
-
-		int right = 0;
-
-		for(Response response : responses){
-			// get the question
-			Question question = questionDao.findById(response.getId()).get();
-
-			// check if the answer is correct
-			if(response.getResponse().equals(question.getRightAnswer())) {
-				right++;
+		int score = 0;
+		for(Response response : responses) {
+			if (questionDao.findById(response.getId()).isPresent()) {
+				Question question = questionDao.findById(response.getId()).get();
+				if(response.getResponse().equals(question.getRightAnswer())) {
+					score++;
+				}
 			}
-
 		}
+		return new ResponseEntity<>(score, HttpStatus.OK);
+	}
 
-		return new ResponseEntity<>(right, HttpStatus.OK);
+	public ResponseEntity<String> addQuestions(List<Question> questions) {
+		questionDao.saveAll(questions);
+		return new ResponseEntity<>("Questions added successfully", HttpStatus.OK);
 	}
 }
